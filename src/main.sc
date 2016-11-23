@@ -18,3 +18,13 @@
  *
  *
  */
+
+import nthElementSort;
+
+
+void main()
+{
+    uint64 s = 100;
+    uint64 k = 4;
+    test_nthElementSort(s, k);
+}

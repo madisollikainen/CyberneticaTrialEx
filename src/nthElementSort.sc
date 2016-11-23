@@ -1,4 +1,4 @@
-/*
+/**
  *  Author : Madis Ollikainen
  *  File : nthElementSort.sc
  *
@@ -11,11 +11,11 @@
  *      and then returning the k-th entry in the sorted array. The sorting
  *      is done using the sort function from the shared3p_sort modul.
  *
- *  b)
+ *  b)  void test_nthElementSort(uint64 s, uint64 k) :
  *
- *
- *
- *
+ *      Runs a simple test run of the nthElementSort function. It takes
+ *      as input the size 's' of the input array 'data' to use as well as
+ *      the number 'k' for the nthElementSort input.
  *
  */
 
@@ -28,6 +28,10 @@ module nthElementSort;
 import stdlib;
 import shared3p;
 import shared3p_sort;
+import shared3p_random;
+
+// Specify a security domain for testing
+domain pd_shared3p shared3p;
 
 // -------------------------- //
 // ----- nthElementSort ----- //
@@ -45,24 +49,26 @@ D int64 nthElementSort (D int64[[1]] data, uint64 k)
 // ------------------------------- //
 // ----- test_nthElementSort ----- //
 // ------------------------------- //
-void test_nthElementSort(unit64 s)
+void test_nthElementSort(uint64 s, uint64 k)
 {
-    domain pd_shared3p shared3p;
+    //  Output info message
+    print("Testing nthElementSort function\n");
 
+    // Create the input array.
     pd_shared3p int64[[1]] input(s);
-
     for (uint i=0; i < s; ++i)
-    {
         input[i] = (int64)(s - i);
-    }
 
-    print("Inputs:");
-//    printVector(declassify(input[0:min(s, 10::uint)]));
+    // Print the input array.
+    print("The input array:");
     printVector(declassify(input));
 
-
+    // Get the k-th smaller element using nthElementSort
     pd_shared3p int64 output = nthElementSort(input, k);
 
+    // Print the k-th smallest element
+    print("The k-th smallest element:");
     print(declassify(output));
+    print("\n");
 }
 
