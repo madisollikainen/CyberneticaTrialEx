@@ -12,7 +12,7 @@
  *      and then returning the k-th entry in the sorted array. The sorting
  *      is done using the sort function from the shared3p_sort modul.
  *
- *  b)  void test_nthElementSortOblivious(uint64 s, uint64 k) :
+ *  b)  void test_nthElementSortOblivious(uint64 s, D uint64 k) :
  *
  *      Runs a simple test run of the nthElementSortOblivious function. It takes
  *      as input the size 's' of the input array 'data' to use as well as
