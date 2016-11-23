@@ -49,9 +49,9 @@ D int64 nthElementSortOblivious (D int64[[1]] data, D uint64 k)
     return vectorLookup(data, k);
 }
 
-// ------------------------------- //
-// ----- test_nthElementSort ----- //
-// ------------------------------- //
+// ---------------------------------------- //
+// ----- test_nthElementSortOblivious ----- //
+// ---------------------------------------- //
 void test_nthElementSortOblivious(uint64 s, pd_shared3p uint64 k)
 {
     //  Output info message
