@@ -20,4 +20,49 @@
  */
 
 
+// Declear this to be a module, such that
+// it could be easily imported to other files.
+module nthElementSort;
+
+// Import necessary modules
+import stdlib;
+import shared3p;
+import shared3p_sort;
+
+// -------------------------- //
+// ----- nthElementSort ----- //
+// -------------------------- //
+template<domain D>
 D int64 nthElementSort (D int64[[1]] data, uint64 k)
+{
+    // Sort the input array
+    data = sort(data);
+
+    // Return the k-th smallest value
+    return data[k];
+}
+
+// ------------------------------- //
+// ----- test_nthElementSort ----- //
+// ------------------------------- //
+void test_nthElementSort(unit64 s)
+{
+    domain pd_shared3p shared3p;
+
+    pd_shared3p int64[[1]] input(s);
+
+    for (uint i=0; i < s; ++i)
+    {
+        input[i] = (int64)(s - i);
+    }
+
+    print("Inputs:");
+//    printVector(declassify(input[0:min(s, 10::uint)]));
+    printVector(declassify(input));
+
+
+    pd_shared3p int64 output = nthElementSort(input, k);
+
+    print(declassify(output));
+}
+
