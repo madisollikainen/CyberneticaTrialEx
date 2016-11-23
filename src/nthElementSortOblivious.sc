@@ -9,8 +9,10 @@
  *      Obliviously returns the k-th smallest element from the input array 'data'.
  *      Here, oblivious referres to the fact that k remains private.
  *      The selection is based on first sorting the input array 'data'
- *      and then returning the k-th entry in the sorted array. The sorting
- *      is done using the sort function from the shared3p_sort modul.
+ *      and then obliviously returning the k-th entry in the sorted array.
+ *      The sorting is done using the sort function from the shared3p_sort modul
+ *      and oblivious array querying is done using the vectorLoopup function
+ *      from the oblivious module.
  *
  *  b)  void test_nthElementSortOblivious(uint64 s, D uint64 k) :
  *
