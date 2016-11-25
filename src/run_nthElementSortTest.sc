@@ -15,7 +15,4 @@ void main()
     uint64 s = 100;
     uint64 k = 4;
     test_nthElementSort(s, k);
-
-//    pd_shared3p uint64 k_ = 4;
-//    test_nthElementSortOblivious(s, k_);
 }
