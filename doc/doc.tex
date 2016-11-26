@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={165mm,240mm},
+ left=22.5mm,
+ top=25mm,
+ }
+
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage[us]{datetime}
+\usepackage{graphicx}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage[font=small,labelfont=bf]{subcaption}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{multicol}
+\usepackage{placeins}
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
+\crefname{equation}{equation}{equations}
+\crefname{figure}{figure}{figures}
+
+\setlength{\parindent}{0in}
+\usepackage[parfill]{parskip}
+
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+
+% \usepackage{fancybox}
+% \usepackage{tikz}
+
+%% Input my macrosetup %%
+% \input{macrosetup.tex}
+
+%% C++ 
+\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\tiny\bf +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\tiny\bf +}}
+\def\CC{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}} }
+
+%% Text style for code
+\newcommand{\ct}[1]{\texttt{#1}}
+
+
+
+\author{Madis Ollikainen}
+\title{Trial exercise for Cybernetica Sharemind team}
+
+\begin{document}
+
+\maketitle
+
+In the following I'll describe my solution of the trial exercise given to me by the Sharemind team of Cybernetica AS.
+
+\section{Task overview} % (fold)
+\label{sec:task_overview}
+
+Sharemind is a secure multi-party computation based database/application server, which allows processing of encrypted data with out the need for decryption. Applications on the Sharemind server are written in the \ct{SecreC} programming language, which separates private and public data on a type system level. The Sharemind SDK provides contains the \ct{SecreC} language and compilers as well as a Sharemind server emulator for testing. For my trial exercise I had to familirise myself with Sharemind SDK and so     
+
+% section task_overview (end)
+
+
+
+% \bibliography{Guardtime.bib}
+
+\end{document}
