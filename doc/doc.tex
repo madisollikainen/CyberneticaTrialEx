@@ -21,18 +21,26 @@
 \usepackage{multicol}
 \usepackage{placeins}
 
+
+
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+% \lstset{language=C}%,caption={Descriptive Caption Text},label=DescriptiveLabel}
+% \renewcommand{\lstlistingname}{Code}
 \usepackage{cleveref}
 \crefname{equation}{equation}{equations}
 \crefname{figure}{figure}{figures}
+% \crefname{lstlisting}{code}{codes}
+% \Crefname{lstlisting}{Code}{Codes}
 
 \setlength{\parindent}{0in}
 \usepackage[parfill]{parskip}
 
 \usepackage[round]{natbib}
 \bibliographystyle{plainnat}
+
 
 % \usepackage{fancybox}
 % \usepackage{tikz}
@@ -85,7 +93,31 @@ For each implemented function I should, of course, present testing functions and
 \section{Solutions} % (fold)
 \label{sec:solutions}
 
-In this section I'll shortly present the main ideas of my solutions and answer the questions posed in \cref{sec:task_overview}. 
+In this section, I'll shortly present the main ideas of my solutions and answer the questions posed in \cref{sec:task_overview}. 
+
+\subsection{\ct{nthElementSort}} % (fold)
+\label{sub:nthelementsort}
+
+The sorting based $k$-th smallest element selection algorithm is rather straight forwards: (1) sort the input; (2) return the $k$-th element from the sorted array. \Cref{code:nthElementSort} demonstrates the implementation of the \ct{nthElementSort} function. It is templated on the privacy type \ct{D}.  
+
+\begin{lstlisting}[caption={The \ct{nthElementSort} function, which is templated on the privacy type \ct{D}.}, label={code:nthElementSort}, language=C++]
+template<domain D>
+D int64 nthElementSort (D int64[[1]] data, uint64 k){    
+    data = sort(data); 	// Sort the input array
+    return data[k];	// Return the k-th smallest value
+}
+\end{lstlisting}
+
+The file \ct{src/nthElementSort.sc} implements the module \ct{nthElementSort}, consisting of the function \ct{nthElementSort} and a test function \ct{test\_nthElementSort}. For running the test, the file \ct{src/run\_nthElementSortTest.sc} has to be compiled and executed. 
+
+% subsection nthelementsort (end)
+
+\subsection{Comparison of \ct{nthElementSort} and \ct{nthElement}} % (fold)
+\label{sub:comparison_of_nthelementsort_and_nthelement}
+
+In this section, I'll compare the efficiency and run time information leakages of the sorting based selection algorithm \ct{nthElementSort} and the \SC standard library selection algorithm \ct{nthElement}. As seen in   
+
+% subsection comparison_of_nthelementsort_and_nthelement (end)
 
 % section solutions (end)
 
