@@ -45,7 +45,10 @@
 \def\CC{{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\tiny\bf ++}} }
 
 %% Text style for code
+\usepackage{xspace}
 \newcommand{\ct}[1]{\texttt{#1}}
+\newcommand{\SC}{\ct{SecreC}\xspace}
+
 
 
 
@@ -61,9 +64,30 @@ In the following I'll describe my solution of the trial exercise given to me by 
 \section{Task overview} % (fold)
 \label{sec:task_overview}
 
-Sharemind is a secure multi-party computation based database/application server, which allows processing of encrypted data with out the need for decryption. Applications on the Sharemind server are written in the \ct{SecreC} programming language, which separates private and public data on a type system level. The Sharemind SDK provides contains the \ct{SecreC} language and compilers as well as a Sharemind server emulator for testing. For my trial exercise I had to familirise myself with Sharemind SDK and so     
+Sharemind is a secure multi-party computation based database/application server, which allows processing of encrypted data with out the need for decryption. Applications on the Sharemind server are written in the \SC programming language, which separates private and public data on a type system level. The Sharemind SDK provides contains the \SC language and compilers as well as a Sharemind server emulator for testing. For my trial exercise I had to familiarise myself with Sharemind SDK and solve a few tasks related to implementing/analysing selection algorithms.
+
+Selection algorithms are algorithms for finding the $k$-th order statistic, \emph{i.e} the $k$-th smallest entry, from a list or array. In my trial exercise, the focus was on $1$D arrays. More specifically, my tasks were
+
+\begin{enumerate}
+      	\item Implement a function \ct{D int64 nthElementSort (D int64[[1]] data, uint64 k)}, which returns the $k$-th smallest element from the input array \ct{data} by first sorting the input array using the sorting function from the \SC standard library.
+
+      	\item Compare the sorting based \ct{nthElementSort} with the \SC standard library selection algorithm \ct{nthElement}: (a) Which of them is more efficient? (b) Which of them leaks more information based on its run time? 
+
+      	\item Implement an oblivious sorting based selection algorithm \ct{D int64 nthElementSortOblivious (D int64[[1]] data, D uint64 k)}. In this context, oblivious refers to the fact that both of the inputs \ct{data} and \ct{k} are private. In the function header this is indicated with specifying the privacy type with \ct{D} (public privacy types do not have to be specified). 
+
+      	\item Implement an oblivious selection algorithm \ct{D int64 nthElementOblivious (D int64[[1]] data, D uint64 k)}, which is based on the \SC standard library function \ct{nthElement}. Who does this impact the efficiency of the algorithm and run time information leakage? 
+\end{enumerate}      
+
+For each implemented function I should, of course, present testing functions and a short documentation. 
 
 % section task_overview (end)
+
+\section{Solutions} % (fold)
+\label{sec:solutions}
+
+In this section I'll shortly present the main ideas of my solutions and answer the questions posed in \cref{sec:task_overview}. 
+
+% section solutions (end)
 
 
 
