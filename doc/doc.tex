@@ -95,12 +95,12 @@ For each implemented function I should, of course, present testing functions and
 
 In this section, I'll shortly present the main ideas of my solutions and answer the questions posed in \cref{sec:task_overview}. 
 
-\subsection{\ct{nthElementSort}} % (fold)
+\subsection{Function \ct{nthElementSort}} % (fold)
 \label{sub:nthelementsort}
 
-The sorting based $k$-th smallest element selection algorithm is rather straight forwards: (1) sort the input; (2) return the $k$-th element from the sorted array. \Cref{code:nthElementSort} demonstrates the implementation of the \ct{nthElementSort} function. It is templated on the privacy type \ct{D}.  
+The sorting based $k$-th smallest element selection algorithm is rather straight forwards: (1) sort the input; (2) return the $k$-th element from the sorted array. \Cref{lst:nthElementSort} demonstrates the implementation of the \ct{nthElementSort} function. It is templated on the privacy type \ct{D}.  
 
-\begin{lstlisting}[caption={The \ct{nthElementSort} function, which is templated on the privacy type \ct{D}.}, label={code:nthElementSort}, language=C++]
+\begin{lstlisting}[caption={The \ct{nthElementSort} function, which is templated on the privacy type \ct{D}.}, label={lst:nthElementSort}, language=C++]
 template<domain D>
 D int64 nthElementSort (D int64[[1]] data, uint64 k){    
     data = sort(data); 	// Sort the input array
@@ -115,7 +115,21 @@ The file \ct{src/nthElementSort.sc} implements the module \ct{nthElementSort}, c
 \subsection{Comparison of \ct{nthElementSort} and \ct{nthElement}} % (fold)
 \label{sub:comparison_of_nthelementsort_and_nthelement}
 
-In this section, I'll compare the efficiency and run time information leakages of the sorting based selection algorithm \ct{nthElementSort} and the \SC standard library selection algorithm \ct{nthElement}. As seen in   
+In this section, I'll compare the efficiency and run time information leakages of the sorting based selection algorithm \ct{nthElementSort} and the \SC standard library selection algorithm \ct{nthElement}. As seen in \cref{sub:nthelementsort}, the function \ct{nthElementSort} consisted of calling the standard library function \ct{sort} and a single array access. Therefore, the comparison can be done between the two standard library functions: \ct{sort} and \ct{nthElement}. I'll start by describing the logic behind these two functions. 
+
+\subsubsection{The \ct{sort} function} % (fold)
+\label{ssub:the_sort_function}
+ 
+The number of operations done in the \ct{sort} function implemented in the \ct{shared3p\_sort} module only depends on the size of the input $N$ and scales quadratically with $N$. Furthermore, for any input with size $N$ the run time is the same, \emph{i.e} the best case, average case and worst case scenarios are the same and all scale quadratically of the input size $O(N^2)$.   
+
+ % subsubsection the_sort_function (end) 
+
+\subsubsection{The \ct{nthElement} function} % (fold)
+\label{ssub:the_nthelement_function}
+
+The \ct{nthElement} function in the \ct{shared3p\_statistics\_common} module is an implementation of the \ct{QuickSelect} algorithm, whose main workhorse is the partitioning subroutine. It takes as an input an array and an index or a pointer specifying a certain entry in the array, which is called a ``pivot''. The partitioning function does a single sweep of the input array and re-arranges the entries such, that all of the entries on the left hand side of the pivot are smaller than the pivot and all on the right hand side are larger than it.     
+
+% subsubsection the_nthelement_function (end)
 
 % subsection comparison_of_nthelementsort_and_nthelement (end)
 
