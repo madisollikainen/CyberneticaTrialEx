@@ -154,10 +154,10 @@ D T _nthElementOblivious (D T[[1]] data, D uint64 left, D uint64 right, D uint64
  *
  */
 template<domain D : shared3p>
-D int64 nthElementOblivious (D int64[[1]] data, D uint64 k, bool shuffle) {
+D int64 nthElementOblivious (D int64[[1]] data, D uint64 k) {
     D uint left_ = 0;
     D uint right_ = size(data)-1;
-    return _nthElementOblivious (data, left_, right_, k, shuffle);
+    return _nthElementOblivious (data, left_, right_, k, true);
 }
 
 // ------------------------------------ //
@@ -178,7 +178,7 @@ void test_nthElementOblivious(uint64 s, pd_shared3p uint64 k)
     printVector(declassify(input));
 
     // Get the k-th smaller element using nthElementSort
-    pd_shared3p int64 output = nthElementOblivious(input, k, true);
+    pd_shared3p int64 output = nthElementOblivious(input, k);
 
     // Print the k-th smallest element
     print("The k-th smallest element:");
