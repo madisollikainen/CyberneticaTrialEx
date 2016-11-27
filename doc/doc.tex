@@ -58,6 +58,9 @@
 \newcommand{\SC}{\ct{SecreC}\xspace}
 
 
+\usepackage{tikz}
+\usetikzlibrary{trees}
+
 
 
 \author{Madis Ollikainen}
@@ -90,10 +93,56 @@ For each implemented function I should, of course, present testing functions and
 
 % section task_overview (end)
 
-\section{My file structure} % (fold)
-\label{sec:my_file_structure}
+\section{The solution repository} % (fold)
+\label{sec:the_solution_repository}
 
-% section my_file_structure (end)
+My solution can be found from my Github account: \url{https://github.com/madisollikainen/CyberneticaTrialEx}. \Cref{fig:solution_file_structure} illustrates the file structure of the solution repository. This report (both \ct{.tex} and \ct{.pdf} files) can be found from the directory \ct{doc}. The source code of the solutions can be found from the directory \ct{src}. For all three functions there is a file \ct{function\_name.sc}, which implements a module called \ct{function\_name} containing the function itself and a testing function called \ct{test\_function\_name}. The main functions, for each of the tests, are implemented in the files \ct{runTest\_function\_name.sc}. In order to run the tests, the files \ct{runTest\_function\_name.sc} have to compiled and executed. The necessary files and guides for compiling and executing \SC code on the Sharemind emulator can be found from \url{http://sharemind-sdk.github.io/}.
+
+% \ct{nthElementSort}, \ct{nthElementSortOblivious} and \ct{nthElementOblivious} there is a file 
+
+% The file structure of the solution repository is illustrated in \cref{fig:solution_file_structure}. The directory \ct{doc} contains the \LaTeX and \ct{PDF} files for this report.  
+
+\tikzstyle{dir}=[draw=black,thick,anchor=west]
+\tikzstyle{file}=[anchor=west]
+\begin{figure}[h]
+\centering
+	\begin{tikzpicture}
+	[%
+	  grow via three points={one child at (0.5,-0.7) and
+	  two children at (0.5,-0.7) and (0.5,-1.4)},
+	  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+	  \node [dir] {\ct{CyberneticaTrialEx}}
+	  child { node [file] {\ct{README.md}}}
+	    child { node [dir] {\ct{src}}
+	    	child { node [file] {\ct{nthElementOblivious.sc}}}
+	    	child { node [file] {\ct{nthElementSort.sc}}}
+	    	child { node [file] {\ct{nthElementSortOblivious.sc}}}
+	    	child { node [file] {\ct{runTest\_nthElementOblivious.sc}}}
+	    	child { node [file] {\ct{runTest\_nthElementSort.sc}}}
+	    	child { node [file] {\ct{runTest\_nthElementSortOblivious.sc}}}
+	    }
+	   	child [missing] {}				
+	    child [missing] {}				
+	    child [missing] {}		
+	   	child [missing] {}				
+	    child [missing] {}				
+	    child [missing] {}		
+	    child { node [dir] {\ct{doc}}
+	    	child { node [file] {\ct{doc.tex}}}
+	    	child { node [file] {\ct{doc.pdf}}}
+	    };
+	    % child [missing] {}				
+	    % child [missing] {}				
+	    % child [missing] {}				
+	    % child { node {texdoc}};
+	\end{tikzpicture}
+\caption{The file structure of the solution repository in Github (\url{https://github.com/madisollikainen/CyberneticaTrialEx}). Directories have black boxes around them, while files do not.}
+\label{fig:solution_file_structure}
+\end{figure}
+
+% section the_solution_repository (end)
+
+
 
 \section{Solution} % (fold)
 \label{sec:solutions}
@@ -113,7 +162,7 @@ D int64 nthElementSort (D int64[[1]] data, uint64 k){
 }
 \end{lstlisting}
 
-The file \ct{src/nthElementSort.sc} implements the module \ct{nthElementSort}, consisting of the function \ct{nthElementSort} and a test function \ct{test\_nthElementSort}. For running the test, the file \ct{src/run\_nthElementSortTest.sc} has to be compiled and executed. 
+% The file \ct{src/nthElementSort.sc} implements the module \ct{nthElementSort}, consisting of the function \ct{nthElementSort} and a test function \ct{test\_nthElementSort}. For running the test, the file \ct{src/run\_nthElementSortTest.sc} has to be compiled and executed. 
 
 % subsection nthelementsort (end)
 
@@ -161,7 +210,7 @@ As stated before, the execution time of the \ct{sort} function is always the sam
 
 This section discusses the function \ct{D int64 nthElementSortOblivious (D int64[[1]] data, D uint64 k)}, which sorts the input array and then returns the $k$-th smallest entry, while keeping both the input array and $k$ private. The key idea here is to notice that the variable $k$ is irrelevant for the sorting: it only comes into play when accessing the $k$-th entry of the sorted array. Thus, we just have to use the \SC standard library function for oblivious vector access \ct{vectorLookup(D bool[[1]] vec, D uint index)} from the module \ct{oblivious}. It is also worth mentioning that the number of operations done by the function \ct{vectorLookup} scales linearly with the size $N$ of the input array. While, this is much more than the constant time array access for a public index $k$, the execution time of the algorithm is still set by the sorting function, which scales quadratically of $N$.
 
-The file \ct{src/nthElementSortOblivious.sc} implements the module \ct{nthElementSortOblivious}, consisting of the function \ct{nthElementSortOblivious} and a test function \ct{test\_nthElementSortOblivious}. For running the test, the file \ct{src/run\_nthElementSortObliviousTest.sc} has to be compiled and executed.
+% The file \ct{src/nthElementSortOblivious.sc} implements the module \ct{nthElementSortOblivious}, consisting of the function \ct{nthElementSortOblivious} and a test function \ct{test\_nthElementSortOblivious}. For running the test, the file \ct{src/run\_nthElementSortObliviousTest.sc} has to be compiled and executed.
 
 % subsection the_nthelementoblivious_function (end)
 
