@@ -7,7 +7,7 @@
  *  a)  D int64 nthElementSortOblivious(D int64[[1]] data, D uint64 k) :
  *
  *      Obliviously returns the k-th smallest element from the input array 'data'.
- *      Here, oblivious referres to the fact that k remains private.
+ *      Here, oblivious referres to the fact that both k and 'data' remain private.
  *      The selection is based on first sorting the input array 'data'
  *      and then obliviously returning the k-th entry in the sorted array.
  *      The sorting is done using the sort function from the shared3p_sort modul
@@ -66,6 +66,10 @@ void test_nthElementSortOblivious(uint64 s, pd_shared3p uint64 k)
     print("The input array:");
     printVector(declassify(input));
 
+    // Print the k
+    print("Find the k-th smallest element, where k is");
+    print(declassify(k));
+
     // Get the k-th smaller element using nthElementSort
     pd_shared3p int64 output = nthElementSortOblivious(input, k);
 
@@ -74,14 +78,4 @@ void test_nthElementSortOblivious(uint64 s, pd_shared3p uint64 k)
     print(declassify(output));
     print("\n");
 }
-
-// ---------------------------------------------------- //
-// ----- Short main function for running the test ----- //
-// ---------------------------------------------------- //
-//void main()
-//{
-//    uint64 s = 100;
-//    pd_shared3p uint64 k = 4;
-//    test_nthElementSortOblivious(s, k);
-//}
 
