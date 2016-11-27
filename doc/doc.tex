@@ -64,7 +64,7 @@
 
 
 \author{Madis Ollikainen}
-\title{Trial exercise for Cybernetica Sharemind team}
+\title{Trial exercise for the Sharemind team of Cybernetica AS}
 
 \begin{document}
 
@@ -77,19 +77,19 @@ In the following I'll describe my solution of the trial exercise given to me by 
 
 Sharemind is a secure multi-party computation based database/application server, which allows processing of encrypted data without the need for decryption. Applications on the Sharemind server are written in the \SC programming language, which separates private and public data on a type system level. The Sharemind SDK provides the \SC language and compilers as well as a Sharemind server emulator for testing. For my trial exercise I had to familiarise myself with Sharemind SDK and solve a few tasks related to implementing/analysing selection algorithms.
 
-Selection algorithms are algorithms for finding the $k$-th order statistic, \emph{i.e} the $k$-th smallest entry, from a list or array. In my trial exercise, the focus was on $1$D arrays. More specifically, my tasks were
+Selection algorithms are algorithms for finding the \ct{k}-th order statistic, \emph{i.e} the \ct{k}-th smallest entry, from a list or array. In my trial exercise, the focus was on $1$D arrays. My tasks were:
 
 \begin{enumerate}
-      	\item Implement a function \ct{D int64 nthElementSort (D int64[[1]] data, uint64 k)}, which returns the $k$-th smallest element from the input array \ct{data} by first sorting the input array using the sorting function from the \SC standard library.
+      	\item Implement a function \ct{D int64 nthElementSort (D int64[[1]] data, uint64 k)}, which returns the \ct{k}-th smallest element from the input array \ct{data} by first sorting the input array using the sorting function from the \SC standard library.
 
       	\item Compare the sorting based \ct{nthElementSort} with the \SC standard library selection algorithm \ct{nthElement}: (a) Which of them is more efficient? (b) Whose execution time leaks more information about the input? 
 
-      	\item Implement an oblivious sorting based selection algorithm \ct{D int64 nthElementSortOblivious (D int64[[1]] data, D uint64 k)}. In this context, oblivious refers to the fact that both of the inputs \ct{data} and \ct{k} are private. In the function header this is indicated with specifying the privacy type with \ct{D} (public privacy types do not have to be specified). 
+      	\item Implement an oblivious sorting based selection algorithm \ct{D int64 nthElementSortOblivious (D int64[[1]] data, D uint64 k)}. In this context, oblivious refers to the fact that both of the inputs, \ct{data} and \ct{k}, are private. In the function header this is indicated with specifying the privacy type with \ct{D} (public privacy types do not have to be specified). 
 
-      	\item Implement an oblivious selection algorithm \ct{D int64 nthElementOblivious (D int64[[1]] data, D uint64 k)}, which is based on the \SC standard library function \ct{nthElement}. Who does this impact the efficiency of the algorithm and run time information leakage? 
+      	\item Implement an oblivious selection algorithm \ct{D int64 nthElementOblivious (D int64[[1]] data, D uint64 k)}, which is based on the \SC standard library function \ct{nthElement}. How does this impact the efficiency of the algorithm and execution time information leakage? 
 \end{enumerate}      
 
-For each implemented function I should, of course, present testing functions and a short documentation. 
+% For each implemented function I should, of course, present testing functions and a short documentation. 
 
 % section task_overview (end)
 
@@ -146,12 +146,12 @@ My solution can be found from my Github account: \url{https://github.com/madisol
 \section{Description of the solution} % (fold)
 \label{sec:description_of_the_solution}
 
-In this section, I'll shortly present the main ideas of my solutions and answer the questions posed in \cref{sec:task_overview}. For the solution code refer to the repository \url{https://github.com/madisollikainen/CyberneticaTrialEx} and \cref{sec:the_solution_repository}. 
+In this section, I'll shortly present the main ideas of my solution and answer the questions posed in \cref{sec:task_overview}. For the solution code refer to the repository \url{https://github.com/madisollikainen/CyberneticaTrialEx} and \cref{sec:the_solution_repository}. 
 
 \subsection{The \ct{nthElementSort} function} % (fold)
 \label{sub:nthelementsort}
 
-The sorting based $k$-th smallest element selection algorithm is rather straight forwards: (1) sort the input using the \SC standard library function \ct{sort} from the \ct{shared3p\_sort} module; (2) return the $k$-th element from the sorted array. 
+The sorting based \ct{k}-th smallest element selection algorithm is rather straight forwards: (1) sort the input using the \SC standard library function \ct{sort} from the \ct{shared3p\_sort} module; (2) return the \ct{k}-th element from the sorted array. 
 % \Cref{lst:nthElementSort} illustrates the implementation of the \ct{nthElementSort} function, which is templated on the privacy type \ct{D} of the input data.  
 
 % \begin{lstlisting}[caption={The \ct{nthElementSort} function, which is templated on the privacy type \ct{D}.}, label={lst:nthElementSort}, language=C++]
@@ -174,7 +174,15 @@ In this section, I'll compare the efficiency and information leakages from execu
 \subsubsection{The \ct{sort} function} % (fold)
 \label{ssub:the_sort_function}
  
-The \ct{sort} function in the \ct{shared3p\_sort} module is an implementation of a $O(N^2)$ sorting function. For the following discussion, there are two important thing to note about this sorting function: (a) Any input with size $N$ the run time is the same, \emph{i.e} the best case, average case and worst case scenarios are the same and all scale quadratically of the input size; (b) The sorting function is data oblivious, \emph{i.e} it doesn't leak information about the input data (besides the size of the input array).  
+The \ct{sort} function in the \ct{shared3p\_sort} module is an implementation of a $O(N^2)$ sorting function. For the following discussion, there are two important thing to note about this sorting function: 
+
+\begin{enumerate}
+	\item For any input with the same size $N$, the execution time of the function is the same, \emph{i.e} the best, average and worst case scenarios are all the same and scale quadratically with $N$.
+
+	\item The sorting function is data oblivious, \emph{i.e} it doesn't leak information about the input data (besides the size of the input array).
+\end{enumerate}
+
+% (a) Any input with size $N$ the run time is the same, \emph{i.e} the best case, average case and worst case scenarios are the same and all scale quadratically of the input size; (b) The sorting function is data oblivious, \emph{i.e} it doesn't leak information about the input data (besides the size of the input array).  
 
 % The number of operations done in the \ct{sort} function only depends on the size of the input $N$ and scales quadratically with $N$. Furthermore, for any input with size $N$ the run time is the same, \emph{i.e} the best case, average case and worst case scenarios are the same and all scale quadratically of the input size $O(N^2)$.   
 
@@ -183,9 +191,9 @@ The \ct{sort} function in the \ct{shared3p\_sort} module is an implementation of
 \subsubsection{The \ct{nthElement} function} % (fold)
 \label{ssub:the_nthelement_function}
 
-The \ct{nthElement} function in the \ct{shared3p\_statistics\_common} module is an implementation of the \ct{QuickSelect} algorithm, whose main workhorse is the partitioning subroutine. The partitioning function takes an array together with an index of a certain entry in the array, called the ``pivot'', and re-arranges the entries of the array such that all entries smaller than the pivot are on the left-hand side of the pivot and everything larger than the pivot are on the right-hand side of the pivot. Thus, the pivot is set to the position it would be in an sorted array. This re-ordering of the array is done with a single sweep over the array. 
+The \ct{nthElement} function in the \ct{shared3p\_statistics\_common} module is an implementation of the \ct{QuickSelect} algorithm, whose main workhorse is the partitioning subroutine. The partitioning function takes an array together with an index of a certain entry in the array, called the ``pivot'', and re-arranges the entries of the array such that all entries smaller than the pivot are on the left-hand side of the pivot and everything larger than the pivot is on the right-hand side of the pivot. Thus, the pivot is set to the position it would be in an sorted array. This re-ordering of the array is done with a single sweep over the array. 
 
-Before starting the selection procedure the \ct{nthElement} function shuffles the input, unless the input variable \ct{bool shuffle} is set to \ct{false}. During the selection, \ct{nthElement} first picks the middle element of the shuffled array as the pivot and then partitions the input array. If the final position of the pivot is at the $k$-th place in the array, the pivot is returned. Otherwise, the search is recursively continued on the correct sub-array: (a) left-hand side sub-array, if the pivot index is larger than $k$; (b) right-hand side sub-array, if the pivot index is smaller than $k$. Unlike the \ct{sort} function, where the execution time is always the same for the same input size $N$, the execution time of the \ct{nthElement} function can vary. The best and average case scenarios of the \ct{nthElement} scale linearly with the input size, but the worst case scenario scales quadratically. The execution time depends on the structure of the shuffled array. 
+Before starting the selection procedure the \ct{nthElement} function shuffles the input, unless the input variable \ct{bool shuffle} is set to \ct{false}. During the selection, \ct{nthElement} first picks the middle element of the shuffled array as the pivot and then partitions the input array. If the final position of the pivot is at the \ct{k}-th place in the array, the pivot is returned. Otherwise, the search is recursively continued on the correct sub-array: (a) left-hand side sub-array, if the pivot index is larger than \ct{k}; (b) right-hand side sub-array, if the pivot index is smaller than \ct{k}. Unlike the \ct{sort} function, where the execution time is always the same for the same input size $N$, the execution time of the \ct{nthElement} function can vary. The best and average case scenarios of the \ct{nthElement} scale linearly with the input size, but the worst case scenario scales quadratically. The execution time depends on the structure of the shuffled array. 
 
 % subsubsection the_nthelement_function (end)
 
@@ -194,7 +202,7 @@ Before starting the selection procedure the \ct{nthElement} function shuffles th
 
 % In order to preserve privacy, both \ct{sort} and \ct{nthElement} should start with shuffling the input array. The \ct{sort} function actually enforces this, while the \ct{nthElement} allows calls with out shuffling, but in such cases it is expected that the array has been shuffled beforehand. Thus all-in-all both algorithms effectively start with shuffling, thus this step is common for both.
 
-We have already seen that the execution time of the \ct{sort} function always (best, average and worst cases) scales quadratically with the input size $N$. In contrast, the execution time of the \ct{nthElement} scales linearly in the best and average case scenarios, but quadratically in the worst case. Thus, for the same input size, on average the \ct{nthElement} function scales better. But, besides simple scaling, there is also the question of the constant in front of the scaling term. When testing the functions, one can witness that the constant is much larger for the \ct{nthElement} function. Therefore, for smaller inputs \ct{sort} is more efficient, while for larger inputs the \ct{nthElement} becomes more efficient.      
+We have already seen that the execution time of the \ct{sort} function always (best, average and worst cases) scales quadratically with the input size $N$. In contrast, the execution time of the \ct{nthElement} scales linearly in the best and average case scenarios, but quadratically in the worst case. Thus, for the same input size, on average the \ct{nthElement} function scales better. But, besides simple scaling, there is also the question of the constant in front of the scaling term. When testing the functions, one can witness that the constant is much larger for the \ct{nthElement} function. Therefore, for smaller inputs \ct{sort} is more efficient, while for larger inputs the \ct{nthElement} becomes more efficient.       
 % subsubsection efficiency_comparison (end)
 
 \subsubsection{Information leakages from execution time} % (fold)
@@ -211,18 +219,18 @@ As stated before, the execution time of the \ct{sort} function is always the sam
 \subsection{The \ct{nthElementSortOblivious} function} % (fold)
 \label{sub:the_nthelementsortoblivious_function}
 
-This section discusses the function \ct{D int64 nthElementSortOblivious (D int64[[1]] data, D uint64 k)}, which sorts the input array and then returns the $k$-th smallest entry, while keeping both the input array and $k$ private. The key idea here is to notice that the variable $k$ is irrelevant for the sorting: it only comes into play when accessing the $k$-th entry of the sorted array. Thus, we just have to use the \SC standard library function for oblivious vector access \ct{vectorLookup(D bool[[1]] vec, D uint index)} from the module \ct{oblivious}. The oblivious vector access is much more costlier than public access. But, as it is used only once, the execution time of the algorithm stays effectively the same. Noticeable changes come into play only for very-very small input sizes.
+This section discusses the function \ct{D int64 nthElementSortOblivious (D int64[[1]] data, D uint64 k)}, which sorts the input array and then returns the \ct{k}-th smallest entry, while keeping both the input array and \ct{k} private. The key idea here is to notice that the variable \ct{k} is irrelevant for the sorting: it only comes into play when accessing the \ct{k}-th entry of the sorted array. Thus, we just have to use the \SC standard library function for oblivious vector access \ct{vectorLookup(D bool[[1]] vec, D uint index)} from the module \ct{oblivious}. The oblivious vector access is much more expensive than public access. Nevertheless, as it is used only once the execution time of the algorithm stays effectively the same. Noticeable changes come into play only for very small input sizes.
 
-% It is also worth mentioning that the number of operations done by the function \ct{vectorLookup} scales linearly with the size $N$ of the input array. While, this is significantly costlier than the constant time access in case of a public index $k$, the execution time of the function is still dominated by the $O(N^2)$ sorting subroutine.
+% It is also worth mentioning that the number of operations done by the function \ct{vectorLookup} scales linearly with the size $N$ of the input array. While, this is significantly costlier than the constant time access in case of a public index \ct{k}, the execution time of the function is still dominated by the $O(N^2)$ sorting subroutine.
 
 % subsection the_nthelementsortoblivious_function (end)
 
 \subsection{The \ct{nthElementOblivious} function} % (fold)
 \label{sub:the_nthelementoblivious_function}
 
-This section discusses the \ct{D int64 nthElementOblivious (D int64[[1]] data, D uint64 k)} function, which uses the same \ct{QuickSelect} algorithm as the \SC standard library function \ct{nthElement}, but keeps the variable $k$ private. Similarly as for the \ct{nthElementSortOblivious}, we have to use functions implemented in the \ct{oblivious} module. However, while the \ct{sort} function uses $k$ only once, the \ct{nthElement} function uses $k$ throughout the function run in the control flow. It is also important to note that the boundaries of the sub-arrays, on which the partitioning function is executed, reveal information about the variable $k$, thus these boundaries also must be kept private. Consequently, most of the vector accessing and updating in the function has to be made via the oblivious \ct{vectorLookup} and \ct{vectorUpdate} functions from the \ct{oblivious} module. Besides the oblivious vector accessing and updating, the condition for the \ct{for loop} in the partitioning function had to be changes, such that the exact boundaries of the sub-arrays are kept private and only the sizes of the sub-arrays are published. 
+This section discusses the \ct{D int64 nthElementOblivious (D int64[[1]] data, D uint64 k)} function, which uses the same \ct{QuickSelect} algorithm as the \SC standard library function \ct{nthElement}, but keeps the variable \ct{k} private. Similarly as for the \ct{nthElementSortOblivious}, we have to use functions implemented in the \ct{oblivious} module. However, while the \ct{sort} function uses \ct{k} only once, the \ct{nthElement} function uses \ct{k} throughout the function run time for comparison in the control flow. It is also important to note that the boundaries of the sub-arrays, on which the partitioning function is executed, reveal information about the variable \ct{k}. Thus, these boundaries also must be kept private. Consequently, most of the vector accessing and updating in the function has to be made via the oblivious \ct{vectorLookup} and \ct{vectorUpdate} functions from the \ct{oblivious} module. Besides the oblivious vector accessing and updating, the condition for the \ct{for loop} in the partitioning function has to be changed, so that the exact boundaries of the sub-arrays are kept private and only the sizes of the sub-arrays are published. 
 
-Such an heavy usage of functions \ct{vectorLookup} and \ct{vectorUpdate} has a strong impact on the efficiency of the function. Namely, the constant in front of the scaling term becomes even larger, making this function very inappropriate for small input arrays. However, as almost nothing is publicly published, the information leakages (even for when the array is unsorted) becomes much smaller.  
+Such an heavy usage of the oblivious subroutines \ct{vectorLookup} and \ct{vectorUpdate} has a strong impact on the efficiency of the function. Now the constant in front of the scaling term is even larger, making this function very inappropriate for small input arrays. However, as almost nothing is publicly published, the information leakages (even for when the array is unsorted) becomes much smaller.  
 
 
 % in had to be done via the oblivious \ct{vectorLookup} and \ct{vectorUpdate} functions from the \ct{oblivious} module. Besides these changes, the loop condition in the \ct{for loop} in the partitioning function had to be changes, such that the exact boundaries of the sub-arrays are kept private and only the sizes of the sub-arrays are published.   
