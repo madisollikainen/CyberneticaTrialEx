@@ -13,8 +13,9 @@ import nthElementOblivious;
 void main()
 {
     uint64 s = 20;
-	for (uint i=0; i < s; ++i){
-        pd_shared3p uint64 k = i;
-        test_nthElementOblivious(s, k);
-    }
+	for (uint i=0; i < s; ++i)
+	{
+		pd_shared3p uint64 k = i;
+		test_nthElementOblivious(s, k);
+	}
 }
