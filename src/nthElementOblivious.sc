@@ -2,13 +2,17 @@
  *  Author : Madis Ollikainen
  *  File : nthElementOblivious.sc
  *
- *  This is a modified version of the nthElement function implemented in
- *  shared3p_statistics_common module of the SecreC [CITE!].
- *
- *  It which holds two functions:
+ *  This implements the modul nthElementOblivious, which hold two functions:
  *
  *  a)  D int64 nthElementOblivious(D int64[[1]] data, D uint64 k) :
  *
+ *      A modified version of the nthElement function implemented in
+ *      shared3p_statistics_common module of the SecreC language standard library.  
+ *      It return the k-th smallest element of the input array 'data', such that 
+ *      both 'data' and k stay private. Essentially it is the same code as for
+ *      the nthElement function in the shared3p_statistics_common module, but with
+ *      the difference that almost all vector accessing and updating is done using 
+ *      the vectorLookup and vectorUpdate functions from the oblivious module.
  *
  *  b)  void test_nthElementOblivious(uint64 s, uint64 k) :
  *
@@ -37,6 +41,9 @@ domain pd_shared3p shared3p;
  *  The original function can be found from:
  *  https://github.com/sharemind-sdk/stdlib/blob/master/lib/shared3p_statistics_common.sc
  *
+ *  ! I've kept the original code as comments starting with an exclamation mark (!), this 
+ *  ! allows comparison between the original and the oblivious version implemented here.
+ *
  *  Description and explanation on the partitioning function
  *  and its role in the selection algorithm can be found from:
  *  http://en.wikipedia.org/wiki/Selection_algorithm#Partition-based_general_selection_algorithm
@@ -44,11 +51,10 @@ domain pd_shared3p shared3p;
  */
 template <domain D, type T>
 D T[[1]] _partitionOblivious(D T[[1]] dataVector, D uint left, D uint right, D uint pivotIndex) {
-//print("Here_P_1");
-    //D T pivotValue = dataVector[pivotIndex];
-    //dataVector[pivotIndex] = dataVector[right];
-    //dataVector[right] = pivotValue;
-    //uint storeIndex = left;
+    //  ! D T pivotValue = dataVector[pivotIndex];
+    //  ! dataVector[pivotIndex] = dataVector[right];
+    //  ! dataVector[right] = pivotValue;
+    //  ! uint storeIndex = left;
     D T pivotValue = vectorLookup(dataVector, pivotIndex);
     dataVector = vectorUpdate(dataVector, pivotIndex, vectorLookup(dataVector, right));
     dataVector = vectorUpdate(dataVector, right, pivotValue);
@@ -56,27 +62,28 @@ D T[[1]] _partitionOblivious(D T[[1]] dataVector, D uint left, D uint right, D u
     D T temp;
 
     // In order to hide the left and right values,
-    // the loop is formulated over the delta = right - left,
+    // the loop is formulated over delta = right - left,
     // thus only leaking the size of the sub-array which is partitioned.
     uint delta = declassify(right-left);
 
-    for (uint i = 0; i < delta; i++) {   //for (uint i = left; i < right; i++) {
+    for (uint i = 0; i < delta; i++) {   
+    //  ! for (uint i = left; i < right; i++) {
         // NB! We leak a quite random comparison result
-        //if (declassify (dataVector[i] < pivotValue)) {
+        //  ! if (declassify (dataVector[i] < pivotValue)) {
         if (declassify (vectorLookup(dataVector, left+i) < pivotValue)) {
-            //temp = dataVector[storeIndex];
-            //dataVector[storeIndex] = dataVector[i];
-            //dataVector[i] = temp;
+            //  ! temp = dataVector[storeIndex];
+            //  ! dataVector[storeIndex] = dataVector[i];
+            //  ! dataVector[i] = temp;
             temp = vectorLookup(dataVector, storeIndex);
             dataVector=vectorUpdate(dataVector, storeIndex, vectorLookup(dataVector, left+i));
             dataVector=vectorUpdate(dataVector, left+i, temp);
-            //storeIndex++;
+            //  ! storeIndex++;
             storeIndex+=1;
         }
     }
-    //temp = dataVector[storeIndex];
-    //dataVector[storeIndex] = dataVector[right];
-    //dataVector[right] = temp;
+    //  ! temp = dataVector[storeIndex];
+    //  ! dataVector[storeIndex] = dataVector[right];
+    //  ! dataVector[right] = temp;
     temp = vectorLookup(dataVector, storeIndex);
     dataVector=vectorUpdate(dataVector, storeIndex, vectorLookup(dataVector, right));
     dataVector=vectorUpdate(dataVector, right, temp);
@@ -92,6 +99,9 @@ D T[[1]] _partitionOblivious(D T[[1]] dataVector, D uint left, D uint right, D u
  *
  *  The original function can be found from:
  *  https://github.com/sharemind-sdk/stdlib/blob/master/lib/shared3p_statistics_common.sc
+ *
+ *  ! I've kept the original code as comments starting with an exclamation mark (!), this 
+ *  ! allows comparison between the original and the oblivious version implemented here.
  *
  */
 template <domain D : shared3p, type T>
@@ -111,7 +121,7 @@ D T _nthElementOblivious (D T[[1]] data, D uint64 left, D uint64 right, D uint64
     }
 
     while (true) {
-        //uint pivotIndex = (left + right) / 2;
+        //  ! uint pivotIndex = (left + right) / 2;
         D uint pivotIndex = (left + right) / 2;
 
         // TODO: We need either structures or references to let
@@ -119,22 +129,22 @@ D T _nthElementOblivious (D T[[1]] data, D uint64 left, D uint64 right, D uint64
         // The current hack of putting the index into the vector is
         // quite bad.
 
-        //_partition (data, left, right, pivotIndex);
-        //uint pivotNewIndex = (uint)declassify (partData[0]);
+        //  ! D T[[1]] partData = _partition (data, left, right, pivotIndex);
+        //  ! uint pivotNewIndex = (uint)declassify (partData[0]);
         D T[[1]] partData = _partitionOblivious (data, left, right, pivotIndex);
         D uint pivotNewIndex = (uint)partData[0];
         data[0:size(data)] = partData[1:size(data)+1];
 
-        //uint pivotDist = pivotNewIndex - left + 1;
+        //  ! uint pivotDist = pivotNewIndex - left + 1;
         D uint pivotDist = pivotNewIndex - left + 1;
 
         // NB! We leak a random? comparison result
-        //if (pivotDist == k) {
-            //return data[pivotNewIndex];
+        //  ! if (pivotDist == k) {
+        //  !   return data[pivotNewIndex];
         if ( declassify(pivotDist == k) ) {
             return vectorLookup(data, pivotNewIndex);
 
-        //} else if (k < pivotDist) {
+        //  ! } else if (k < pivotDist) {
         } else if ( declassify(k < pivotDist) ) {
             right = pivotNewIndex - 1;
 
@@ -147,7 +157,7 @@ D T _nthElementOblivious (D T[[1]] data, D uint64 left, D uint64 right, D uint64
 }
 
 /**
- *  Modification of the nthElement function into the nthElementOblivious.
+ *  Modification of the nthElement wrapper function into the nthElementOblivious.
  *
  *  The original function can be found from:
  *  https://github.com/sharemind-sdk/stdlib/blob/master/lib/shared3p_statistics_common.sc
@@ -176,6 +186,10 @@ void test_nthElementOblivious(uint64 s, pd_shared3p uint64 k)
     // Print the input array.
     print("The input array:");
     printVector(declassify(input));
+
+    // Print the k
+    print("Find the k-th smallest element, where k is");
+    print(declassify(k));
 
     // Get the k-th smaller element using nthElementSort
     pd_shared3p int64 output = nthElementOblivious(input, k);
