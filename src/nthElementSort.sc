@@ -59,8 +59,12 @@ void test_nthElementSort(uint64 s, uint64 k)
         input[i] = (int64)(s - i);
 
     // Print the input array.
-    print("The input array:");
+    print("From  the input array:");
     printVector(declassify(input));
+
+    // Print the k
+    print("Find the k-th smallest element, where k is");
+    print(k);
 
     // Get the k-th smaller element using nthElementSort
     pd_shared3p int64 output = nthElementSort(input, k);
@@ -71,12 +75,3 @@ void test_nthElementSort(uint64 s, uint64 k)
     print("\n");
 }
 
-// ---------------------------------------------------- //
-// ----- Short main function for running the test ----- //
-// ---------------------------------------------------- //
-//void main()
-//{
-//    uint64 s = 100;
-//    uint64 k = 4;
-//    test_nthElementSort(s, k);
-//}
