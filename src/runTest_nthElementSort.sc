@@ -2,7 +2,7 @@
  *  Author : Madis Ollikainen
  *  File : run_nthElementSortTest.sc
  *
- *  Runs the test for the functions
+ *  Runs the test for the function
  *      D int64 nthElementSort(D int64[[1]] data, uint64 k)
  *
  *
